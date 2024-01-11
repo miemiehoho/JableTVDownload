@@ -14,6 +14,10 @@ def get_parser():
                         help="Jable TV URL to download")
     parser.add_argument("--all-urls", type=str, default="",
                         help="Jable URL contains multiple avs")
+    parser.add_argument("--actor-name", type=str, default="other",
+                        help="Actor Name")
+    parser.add_argument("--encode", type=str, default="0",
+                        help="0不转档 1GPU转档  2CPU转档")
     
     return parser
 
