@@ -5,6 +5,8 @@ import os
 
 from args import *
 from download import download
+from download_threadpool import download_threadpool
+from makedir import makedirs
 from movies import movieLinks
 
 # In[2]:
@@ -12,25 +14,26 @@ from movies import movieLinks
 parser = get_parser()
 args = parser.parse_args()
 
+encode = args.encode
+workers = args.workers
+actorName = args.actor_name
+output_dir = os.path.join(args.output, actorName)
+temp_dir = os.path.join(os.path.join(os.getcwd(), 'temp'), actorName)
+# 创建目录
+makedirs(temp_dir, output_dir)
+
 if (len(args.url) != 0):
     url = args.url
-    encode = args.encode
-    download(url, encode)
+    download(url, encode, temp_dir, output_dir)
 elif (args.random == True):
     url = av_recommand()
-    encode = args.encode
-    download(url, encode)
+    download(url, encode, temp_dir, output_dir)
 elif (args.all_urls != ""):
     all_urls = args.all_urls
-    actorName = args.actor_name
     urls = movieLinks(all_urls)
-    encode = args.encode
-    if not os.path.exists(actorName):
-        os.makedirs(actorName)
-    os.chdir(actorName)
-    for url in urls:
-        download(url, encode)
+    # 多线程下载
+    download_threadpool(urls, encode, temp_dir, output_dir, workers)
 else:
     # 使用者輸入Jable網址
-    url = input('輸入jable網址,默认CPU转档:')
-    download(url, 2)
+    url = input('輸入jable網址,默认不转档:')
+    download(url, encode, temp_dir, output_dir)

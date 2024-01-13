@@ -38,8 +38,15 @@ c.
 ![image](https://github.com/hcjohn463/JableDownload/blob/main/img/download2.PNG)  
 
 ### 5.等待下載(Wait Download)  
-要轉檔輸入`y`，不要輸入`n`   
-要用GPU加速(Nvidia)轉檔輸入`y`，用CPU輸入`n`   
+
+下载指定影片
+`python main.py`
+
+下载随机影片
+`python main.py --random True`
+
+下载指定页面影片
+`python main.py --all-urls https://jable.tv/models/momonogi-kana/2/ --actor-name momonogi-kana --encode 1 --output C:\Users\Downloads\videos`
 
 ![image](https://github.com/hcjohn463/JableDownload/blob/main/img/download.PNG)
 

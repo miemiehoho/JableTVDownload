@@ -1,9 +1,9 @@
 import argparse
-from bs4 import BeautifulSoup
 import random
-from urllib.request import Request, urlopen
-from config import headers
 import re
+from urllib.request import Request, urlopen
+
+from bs4 import BeautifulSoup
 
 
 def get_parser():
@@ -18,6 +18,11 @@ def get_parser():
                         help="Actor Name")
     parser.add_argument("--encode", type=str, default="0",
                         help="0不转档 1GPU转档  2CPU转档")
+    parser.add_argument("--output", type=str, default="output",
+                        help="输出路径")
+    parser.add_argument("--workers", type=int, default="3",
+                        help="工作线程数量")
+
     
     return parser
 
