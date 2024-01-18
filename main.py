@@ -17,6 +17,7 @@ args = parser.parse_args()
 encode = args.encode
 workers = args.workers
 actorName = args.actor_name
+urls_path = args.urls_path
 output_dir = os.path.join(args.output, actorName)
 temp_dir = os.path.join(os.path.join(os.getcwd(), 'temp'), actorName)
 # 创建目录
@@ -33,6 +34,12 @@ elif (args.all_urls != ""):
     urls = movieLinks(all_urls)
     # 多线程下载
     download_threadpool(urls, encode, temp_dir, output_dir, workers)
+elif (urls_path != ""):
+    urls = []
+    with open(urls_path, 'r') as file:
+        urls = file.readlines()
+    for url in urls:
+        download(url, encode, temp_dir, output_dir)
 else:
     # 使用者輸入Jable網址
     url = input('輸入jable網址,默认不转档:')

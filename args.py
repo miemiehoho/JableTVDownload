@@ -20,8 +20,10 @@ def get_parser():
                         help="0不转档 1GPU转档  2CPU转档")
     parser.add_argument("--output", type=str, default="output",
                         help="输出路径")
-    parser.add_argument("--workers", type=int, default="3",
+    parser.add_argument("--workers", type=int, default="1",
                         help="工作线程数量")
+    parser.add_argument("--urls_path", type=str, default="",
+                        help="url文件路径")
 
     
     return parser
