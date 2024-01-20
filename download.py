@@ -4,6 +4,7 @@ import urllib.request
 
 import m3u8
 import requests
+from lxml import etree
 
 ssl._create_default_https_context = ssl._create_unverified_context
 from Crypto.Cipher import AES
@@ -18,26 +19,11 @@ from encode import ffmpegEncode
 from makedir import make_film_dirs
 from merge import mergeMp4
 from move_film import move_film
+from config import headers
 
 
 def download(url, encode, temp_dir, output_dir):
     print('正在下載影片: ' + url)
-    # 判断输出路径下目标影片是否已下载完成
-    urlSplit = url.split('/')
-    film_name = urlSplit[-2]
-    file_temp_dir = os.path.join(temp_dir, film_name)
-    file_output_dir = os.path.join(output_dir, film_name)
-
-    file_mp4_output_dir = os.path.join(file_output_dir, f'{film_name}.mp4')
-    print(file_mp4_output_dir)
-    if os.path.exists(file_mp4_output_dir):
-        print('番號資料夾已存在, 跳過...')
-        return
-
-    # 建立番號資料夾
-    make_film_dirs(file_temp_dir, file_output_dir)
-
-    os.chdir(file_temp_dir)
     # 配置Selenium參數
     options = Options()
     options.add_argument('--no-sandbox')
@@ -49,6 +35,31 @@ def download(url, encode, temp_dir, output_dir):
         "user-agent=Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36")
     dr = webdriver.Chrome(options=options)
     dr.get(url)
+    etree_html = etree.HTML(dr.page_source)
+    contents = etree_html.xpath('/html/body/div[3]/div/div/div[1]/section[2]/div[1]/div[1]/h4')
+    # 获取标题
+    urlSplit = url.split('/')
+    film_name = urlSplit[-2]
+    for content in contents:
+        print("content: " + content.text)
+        film_name = content.text
+
+    file_temp_dir = os.path.join(temp_dir, film_name)
+    file_output_dir = os.path.join(output_dir, film_name)
+
+    file_mp4_output_dir = os.path.join(file_output_dir, f'{film_name}.mp4')
+    print(file_mp4_output_dir)
+    # 判断输出路径下目标影片是否已下载完成
+    if os.path.exists(file_mp4_output_dir):
+        print('番號資料夾已存在, 跳過...')
+        return
+
+    # 建立番號資料夾
+    make_film_dirs(file_temp_dir, file_output_dir)
+
+    os.chdir(file_temp_dir)
+
+    # 获取m3u8
     result = re.search("https://.+m3u8", dr.page_source)
     print(f'result: {result}')
     m3u8url = result[0]
