@@ -23,8 +23,10 @@ def traverse_directory(path):
         for file in files:
             # print(os.path.join(root, file))
             if (file.endswith(".mp4")):
-                fileSplit = file.split(' ')
-                video_names.append(fileSplit[0])
+                fileSplit_type_a = file.split(' ')
+                video_names.append(fileSplit_type_a[0])
+                fileSplit_type_b = file.split('.')
+                video_names.append(fileSplit_type_b[0])
     print(video_names)
     return video_names
 
@@ -49,6 +51,8 @@ for url in urls:
     url_name = url.split('/')[-2]
     url_exist = 0
     for video_name in video_names:
+        # print("url_name.lower() "+url_name.lower())
+        # print("video_name.lower() "+video_name.lower())
         if url_name.lower() == video_name.lower():
             url_exist = 1
     if url_exist == 0:

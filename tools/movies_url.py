@@ -1,5 +1,6 @@
 # In[0]:
 # 相关模块导入
+import os
 import time
 
 from bs4 import BeautifulSoup
@@ -26,12 +27,18 @@ def movies_url(url, actor_name, num):
     print('获取到 {0} 個影片'.format(len(links)))
 
     # 写入url
-    writer = open(actor_name + "-urls.txt", "a")
+    save_path = os.path.join(os.getcwd(), actor_name)
+    # 检查目录是否存在，不存在则创建
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+    file_path = os.path.join(save_path, actor_name + "-urls.txt")
+    writer = open(file_path, "a")
     for link in links:
         writer.write(link + "\n")
     # 关闭打开的文件
     writer.close()
-    writer = open(actor_name + "-" + str(num) + "-urls.txt", "a")
+    file_path = os.path.join(save_path, actor_name + "-" + str(num) + "-urls.txt")
+    writer = open(file_path, "a")
     for link in links:
         writer.write(link + "\n")
     writer.close()
