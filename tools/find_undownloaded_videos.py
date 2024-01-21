@@ -51,8 +51,12 @@ for url in urls:
     url_name = url.split('/')[-2]
     url_exist = 0
     for video_name in video_names:
+        lower_url_name = url_name.lower()
+        lower_video_name = video_name.lower()
         # print("url_name.lower() "+url_name.lower())
         # print("video_name.lower() "+video_name.lower())
+        if lower_url_name.find(lower_video_name) != -1:
+            url_exist = 1
         if url_name.lower() == video_name.lower():
             url_exist = 1
     if url_exist == 0:

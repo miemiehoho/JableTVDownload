@@ -39,7 +39,10 @@ elif (urls_path != ""):
     with open(urls_path, 'r') as file:
         urls = file.readlines()
     for url in urls:
-        download(url, encode, temp_dir, output_dir)
+        try:
+            download(url, encode, temp_dir, output_dir)
+        except:
+            print("下载： " + url + " 时发生异常")
 else:
     # 使用者輸入Jable網址
     url = input('輸入jable網址,默认不转档:')

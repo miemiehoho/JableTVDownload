@@ -22,6 +22,20 @@ from move_film import move_film
 from config import headers
 
 
+def create_folder_with_valid_name(folder_name):
+    # 去掉不合法的字符
+    folder_name = folder_name.replace('/', '')  # 去掉斜杠
+    folder_name = folder_name.replace('?', '')  # 去掉问号
+    folder_name = folder_name.replace(':', '')  # 去掉冒号
+    folder_name = folder_name.replace('*', '')  # 去掉星号
+    folder_name = folder_name.replace('"', '')  # 去掉双引号
+    folder_name = folder_name.replace('<', '')  # 去掉小于号
+    folder_name = folder_name.replace('>', '')  # 去掉大于号
+    folder_name = folder_name.replace('|', '')  # 去掉竖线
+
+    return folder_name
+
+
 def download(url, encode, temp_dir, output_dir):
     print('正在下載影片: ' + url)
     # 配置Selenium參數
@@ -43,6 +57,8 @@ def download(url, encode, temp_dir, output_dir):
     for content in contents:
         print("content: " + content.text)
         film_name = content.text
+    # 去掉不合法的字符
+    film_name = create_folder_with_valid_name(film_name)
 
     file_temp_dir = os.path.join(temp_dir, film_name)
     file_output_dir = os.path.join(output_dir, film_name)
